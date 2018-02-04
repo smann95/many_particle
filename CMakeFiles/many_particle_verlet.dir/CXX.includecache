@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sean/Documents/space_worksheet/many_particle/many_particle_verlet.cpp
+many_particle_verlet.h
+/home/sean/Documents/space_worksheet/many_particle/many_particle_verlet.h
+
+/home/sean/Documents/space_worksheet/many_particle/many_particle_verlet.h
+iostream
+-
+cmath
+-
+string
+-
+random
+-
+
