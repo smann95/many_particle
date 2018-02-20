@@ -8,20 +8,27 @@ int main(int argc, char **argv)
     return 1;
   }
 
-vector<double> conditions;
-double temp;
-ifstream input (argv[1]);
+  vector<double> conditions;
+  double temp;
+  ifstream input (argv[1]);
   while (input >> temp){
-  conditions.push_back(temp);
-} 
+    conditions.push_back(temp);
+  } 
 
   np = conditions[0];
   L = conditions[1];
   T = conditions[2];
+  steps = conditions[3];
+
+  data.open("data.xyz");
 
   srandom(time(NULL));
   create_matter();
 
- // double old_pe = get_pe();
+  for(int t = 0; t < steps; t++){
+    move_particle();
+  }
+  data.close();
+  // double old_pe = get_pe();
   return 0;
 }

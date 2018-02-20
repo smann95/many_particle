@@ -13,10 +13,11 @@ struct particle{
 
 int np;
 double L;
-double k = 1;
+double k = 1.38e-23;
 double T;
+double steps;
 vector<particle> particles;
-
+ofstream data;
 //random number between min and max
 double get_random_number(double min, double max)
 {
@@ -30,14 +31,16 @@ void create_matter();
 bool evaluate_pe();
 
 //finds potential energy 
-double get_pe(double sigma, double epsilon)
+double get_pe()
 {
-  double s = sigma,
+  double sigma = 0.3345,
+         s = sigma,
          s2 = s*s,
          s6 = s2*s2*s2,
          s12 = s6*s6;
 
-  double e = epsilon;
+  double epsilon = 125.7,
+         e = epsilon;
   double pe = 0;
   for (int a = 0; a < np; a++){
     for (int b = a + 1; b < np; b++){
@@ -102,6 +105,28 @@ void create_matter()
   gib_data_bls();
 }
 
+void no_leave_box(int n)
+{
+  if (particles[n].x[0] > L){
+    particles[n].x[0] -= L;
+  }
+  if (particles[n].x[1] > L){
+    particles[n].x[1] -= L;
+  }
+  if (particles[n].x[2] > L){
+    particles[n].x[2] -= L;
+  }
+  if (particles[n].x[0] <= 0){
+    particles[n].x[0] += L;
+  }
+  if (particles[n].x[1] <= 0){
+    particles[n].x[1] += L;
+  }
+  if (particles[n].x[2] <= 0){
+    particles[n].x[2] += L;
+  }
+}
+
 //computes distance for each individual coordinate and then finds the total
 //distance
 double get_distance(int a, int b, const vector<particle> & v)
@@ -132,15 +157,38 @@ double get_distance(int a, int b, const vector<particle> & v)
   return d;
 }
 
+void move_particle()
+{
+  double old_pe = get_pe();
+
+  double dx = get_random_number(0, 0.5*L);
+  double dy = get_random_number(0, 0.5*L);
+  double dz = get_random_number(0, 0.5*L);
+
+  int n = rand() % particles.size();
+
+  particles[n].x[0] += dx;
+  particles[n].x[1] += dy;
+  particles[n].x[2] += dz;
+
+  double new_pe = get_pe();
+
+  no_leave_box(n);
+
+  if (!(evaluate_pe(old_pe, new_pe)) == true) {
+    particles[n].x[0] -= dx;
+    particles[n].x[1] -= dy;
+    particles[n].x[2] -= dz;
+  }
+  gib_data_bls();
+}
+
 void gib_data_bls()
 {
-  ofstream data;
-  data.open("data.xyz");
   data << np << "\n\n";
 
   for (int n = 0; n < np; n++){
     data << "Ar " << particles[n].x[0] << " " <<
-      particles[n].x[1] << " " << particles[n].x[2] << endl;
+      particles[n].x[1] << " " << particles[n].x[2] << "\n";
   }
-  data.close();
 }
