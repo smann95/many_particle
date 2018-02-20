@@ -13,7 +13,7 @@ struct particle{
 
 int np;
 double L;
-double k = 1.38e-23;
+double k = 0.00138;
 double T;
 double steps;
 vector<particle> particles;
@@ -33,13 +33,13 @@ bool evaluate_pe();
 //finds potential energy 
 double get_pe()
 {
-  double sigma = 0.3345,
+  double sigma = 3.345,
          s = sigma,
          s2 = s*s,
          s6 = s2*s2*s2,
          s12 = s6*s6;
 
-  double epsilon = 125.7,
+  double epsilon = 1.73e-21,
          e = epsilon;
   double pe = 0;
   for (int a = 0; a < np; a++){
@@ -109,7 +109,7 @@ void no_leave_box(int n)
 {
   if (particles[n].x[0] > L){
     particles[n].x[0] -= L;
-  }
+  } 
   if (particles[n].x[1] > L){
     particles[n].x[1] -= L;
   }
